@@ -1,0 +1,71 @@
+import 'package:blog_post/features/posts/domain/entities/post_entity.dart';
+import 'package:blog_post/features/posts/presentations/bloc/delete_post/delete_post_cubit.dart';
+import 'package:blog_post/features/posts/presentations/bloc/search_post/search_post_cubit.dart';
+import 'package:blog_post/features/posts/presentations/widgets/posts_table/table_data.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class PostsTable extends StatefulWidget {
+  final List<PostEntity> posts;
+
+  const PostsTable({super.key, required this.posts});
+
+  @override
+  State<PostsTable> createState() => _PostsTableState();
+}
+
+class _PostsTableState extends State<PostsTable> {
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        PaginatedDataTable(
+          header: const Text('Blog Posts'),
+          actions: [
+            Container(
+              width: 300,
+              decoration: const BoxDecoration(color: Colors.white),
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: "Search post...",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  suffixIcon: IconButton(
+                    onPressed: () => _searchPost(_searchController.value.text),
+                    icon: const Icon(Icons.search),
+                  ),
+                ),
+                onChanged: _searchPost,
+              ),
+            ),
+          ],
+          rowsPerPage: 15,
+          columns: const [
+            DataColumn(label: Text('ID')),
+            DataColumn(label: Text('User ID')),
+            DataColumn(label: Text('Title')),
+            DataColumn(label: Text('Actions')),
+          ],
+          source: TableData(
+            context: context,
+            posts: widget.posts,
+            onDelete: (postId) => _onDeletePost(postId),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _onDeletePost(int postId) {
+    context.read<DeletePostCubit>().deletePost(postId);
+  }
+
+  void _searchPost(String value) {
+    context.read<SearchPostCubit>().searchPost(value);
+  }
+}
