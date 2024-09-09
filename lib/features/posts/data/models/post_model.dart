@@ -13,7 +13,7 @@ class PostModel extends PostEntity {
       userId: parseJson['userId'] ?? 0,
       id: parseJson['id'] ?? 0,
       title: parseJson['title'] ?? '',
-      body: (parseJson['body']).toString().replaceAll("\n", " "),
+      body: parseJson['body'] ?? '',
     );
   }
 

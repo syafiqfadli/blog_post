@@ -17,3 +17,12 @@ final class FilterPostsEvent extends GetAllPostsEvent {
   @override
   List<Object> get props => [postId];
 }
+
+final class UpdatePostsEvent extends GetAllPostsEvent {
+  final PostEntity post;
+
+  const UpdatePostsEvent({required this.post});
+
+  @override
+  List<Object> get props => [post];
+}

@@ -22,7 +22,8 @@ class SearchPostCubit extends Cubit<List<PostEntity>> {
     final filteredPosts = posts.where((post) {
       final searchId = post.id.toString().contains(query);
       final searchUserId = post.userId.toString().contains(query);
-      final searchTitle = post.title.contains(query);
+      final searchTitle =
+          post.title.toLowerCase().contains(query.toLowerCase());
 
       return searchId || searchUserId || searchTitle;
     }).toList();

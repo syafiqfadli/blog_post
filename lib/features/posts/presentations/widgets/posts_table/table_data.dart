@@ -34,22 +34,20 @@ class TableData extends DataTableSource {
             children: [
               IconButton(
                 icon: const Icon(Icons.description),
+                color: Colors.grey,
                 tooltip: 'View',
                 onPressed: () => _showPostDialog(context, post),
-              ),
-              IconButton(
-                icon: const Icon(Icons.edit),
-                color: Colors.grey,
-                tooltip: 'Edit',
-                onPressed: () => {},
               ),
               BlocBuilder<DeletePostCubit, DeletePostState>(
                 builder: (context, state) {
                   if (state is DeletePostLoading && state.postId == post.id) {
-                    return const SizedBox(
-                      height: 30,
-                      width: 30,
-                      child: CircularProgressIndicator(),
+                    return const Padding(
+                      padding: EdgeInsets.all(5),
+                      child: SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(),
+                      ),
                     );
                   }
 

@@ -17,6 +17,25 @@ class PostRepoImpl implements PostRepo {
   PostRepoImpl({required this.apiDataSource});
 
   @override
+  Future<Either<Failure, PostEntity>> addPost(PostEntity post) async {
+    final url = Uri.parse(RouteConstant.addPost);
+    final responseEither = await apiDataSource.post(
+      url,
+      headers: headers,
+      body: {
+        "userId": post.userId,
+        "title": post.title,
+        "body": post.body,
+      },
+    );
+
+    return responseEither.fold(
+      (failure) => Left(ServerFailure(message: failure.message)),
+      (response) => Right(PostModel.fromJson(jsonDecode(response.body))),
+    );
+  }
+
+  @override
   Future<Either<Failure, List<PostEntity>>> getAllPosts() async {
     final url = Uri.parse(RouteConstant.getAllPosts);
     final responseEither = await apiDataSource.get(url, headers: headers);
@@ -24,17 +43,6 @@ class PostRepoImpl implements PostRepo {
     return responseEither.fold(
       (failure) => Left(ServerFailure(message: failure.message)),
       (response) => Right(PostModel.fromList(jsonDecode(response.body))),
-    );
-  }
-
-  @override
-  Future<Either<Failure, PostEntity>> getSinglePost(int postId) async {
-    final url = Uri.parse(RouteConstant.getPost(postId));
-    final responseEither = await apiDataSource.get(url, headers: headers);
-
-    return responseEither.fold(
-      (failure) => Left(ServerFailure(message: failure.message)),
-      (response) => Right(PostModel.fromJson(jsonDecode(response.body))),
     );
   }
 

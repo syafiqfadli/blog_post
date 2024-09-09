@@ -14,6 +14,7 @@ class GetAllPostsBloc extends Bloc<GetAllPostsEvent, GetAllPostsState> {
   }) : super(GetAllPostsInitial()) {
     on<GetPostsEvent>((event, emit) => _getAllPosts(event, emit));
     on<FilterPostsEvent>((event, emit) => _filterPosts(event, emit));
+    on<UpdatePostsEvent>((event, emit) => _updatePosts(event, emit));
   }
 
   Future<void> _getAllPosts(
@@ -45,6 +46,20 @@ class GetAllPostsBloc extends Bloc<GetAllPostsEvent, GetAllPostsState> {
     final posts = (state as GetAllPostsLoaded).posts;
     final updatedPosts =
         posts.where((post) => post.id != event.postId).toList();
+
+    emit(GetAllPostsLoaded(posts: updatedPosts));
+  }
+
+  Future<void> _updatePosts(
+    UpdatePostsEvent event,
+    Emitter<GetAllPostsState> emit,
+  ) async {
+    if (state is! GetAllPostsLoaded) {
+      return;
+    }
+
+    final posts = (state as GetAllPostsLoaded).posts;
+    final updatedPosts = [...posts, event.post];
 
     emit(GetAllPostsLoaded(posts: updatedPosts));
   }

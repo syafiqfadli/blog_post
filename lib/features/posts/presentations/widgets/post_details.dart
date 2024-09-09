@@ -56,6 +56,7 @@ class _PostDetailsState extends State<PostDetails> {
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Container(
                   padding: const EdgeInsets.all(10),
+                  width: screenWidth * 0.8,
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(Radius.circular(10)),
                     border: Border.all(
