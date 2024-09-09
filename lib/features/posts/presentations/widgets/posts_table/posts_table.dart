@@ -23,66 +23,75 @@ class _PostsTableState extends State<PostsTable> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return BlocProvider.value(
       value: _rowChangedCubit,
-      child: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          BlocBuilder<RowChangedCubit, int>(
-            builder: (context, row) {
-              return PaginatedDataTable(
-                header: Row(
-                  children: [
-                    const Text('Blog Posts'),
-                    const SizedBox(width: 10),
-                    IconButton(
-                      onPressed: () => _showNewPostDialog(context),
-                      tooltip: 'Add Post',
-                      icon: const Icon(Icons.add_box_rounded),
-                    )
-                  ],
-                ),
-                actions: [
-                  Container(
-                    width: 300,
-                    decoration: const BoxDecoration(color: Colors.white),
-                    child: TextField(
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                        hintText: "Search post...",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        suffixIcon: IconButton(
-                          onPressed: () =>
-                              _searchPost(_searchController.value.text),
-                          icon: const Icon(Icons.search),
-                        ),
-                      ),
-                      onChanged: _searchPost,
-                    ),
+      child: BlocListener<DeletePostCubit, DeletePostState>(
+        listener: (context, state) {
+          if (state is DeletePostSuccessful) {
+            _searchController.clear();
+          }
+        },
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            BlocBuilder<RowChangedCubit, int>(
+              builder: (context, row) {
+                return PaginatedDataTable(
+                  header: Row(
+                    children: [
+                      const Text('Blog Posts'),
+                      const SizedBox(width: 10),
+                      IconButton(
+                        onPressed: () => _showNewPostDialog(context),
+                        tooltip: 'Add Post',
+                        icon: const Icon(Icons.add_box_rounded),
+                      )
+                    ],
                   ),
-                ],
-                rowsPerPage: row,
-                availableRowsPerPage: const [5, 15, 25, 35],
-                columns: const [
-                  DataColumn(label: Text('ID')),
-                  DataColumn(label: Text('User ID')),
-                  DataColumn(label: Text('Title')),
-                  DataColumn(label: Text('Actions')),
-                ],
-                source: TableData(
-                  context: context,
-                  posts: widget.posts,
-                  onDelete: (postId) => _onDeletePost(postId),
-                ),
-                onRowsPerPageChanged: (value) {
-                  _rowChangedCubit.setRow(value ?? 15);
-                },
-              );
-            },
-          ),
-        ],
+                  actions: [
+                    Container(
+                      width: screenWidth < 400 ? screenWidth * 0.3 : 300,
+                      decoration: const BoxDecoration(color: Colors.white),
+                      child: TextField(
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          hintText: "Search post...",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          suffixIcon: IconButton(
+                            onPressed: () =>
+                                _searchPost(_searchController.text),
+                            icon: const Icon(Icons.search),
+                          ),
+                        ),
+                        onChanged: _searchPost,
+                      ),
+                    ),
+                  ],
+                  rowsPerPage: row,
+                  availableRowsPerPage: const [5, 15, 25, 35],
+                  columns: const [
+                    DataColumn(label: Text('ID')),
+                    DataColumn(label: Text('User ID')),
+                    DataColumn(label: Text('Title')),
+                    DataColumn(label: Text('Actions')),
+                  ],
+                  source: TableData(
+                    context: context,
+                    posts: widget.posts,
+                    onDelete: (postId) => _onDeletePost(postId),
+                  ),
+                  onRowsPerPageChanged: (value) {
+                    _rowChangedCubit.setRow(value ?? 15);
+                  },
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

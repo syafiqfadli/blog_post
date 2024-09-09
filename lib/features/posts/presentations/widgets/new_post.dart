@@ -32,7 +32,7 @@ class _NewPostState extends State<NewPost> {
           }
         },
         child: Container(
-          width: screenWidth * 0.8,
+          width: screenWidth,
           height: screenHeight,
           padding: const EdgeInsets.all(16),
           child: Form(
@@ -63,6 +63,10 @@ class _NewPostState extends State<NewPost> {
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Field is required";
+                        }
+
+                        if (!isNumeric(value)) {
+                          return "Please enter number only";
                         }
 
                         return null;
@@ -134,7 +138,7 @@ class _NewPostState extends State<NewPost> {
                               child: const Text("Cancel"),
                             ),
                           ),
-                          const SizedBox(width: 10),
+                          const SizedBox(width: 30),
                           Expanded(
                             child: (state is AddPostLoading)
                                 ? const Center(
@@ -173,5 +177,13 @@ class _NewPostState extends State<NewPost> {
     );
 
     _addPostCubit.addPost(post);
+  }
+
+  bool isNumeric(String value) {
+    if (value.isEmpty) {
+      return false;
+    }
+
+    return int.tryParse(value) != null;
   }
 }

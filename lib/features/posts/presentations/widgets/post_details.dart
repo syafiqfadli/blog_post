@@ -84,6 +84,7 @@ class _PostDetailsState extends State<PostDetails> {
                       const Divider(),
                       ListView.builder(
                         shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: comments.length,
                         itemBuilder: (context, index) {
                           final comment = comments[index];

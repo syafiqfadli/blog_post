@@ -39,12 +39,14 @@ class _PostListPageState extends State<PostListPage> {
             _searchPostCubit.searchPost("");
           }
         },
-        child: Scaffold(
-          body: Center(
-            child: BlocBuilder<SearchPostCubit, List<PostEntity>>(
-              builder: (context, posts) {
-                return PostsTable(posts: posts);
-              },
+        child: SafeArea(
+          child: Scaffold(
+            body: Center(
+              child: BlocBuilder<SearchPostCubit, List<PostEntity>>(
+                builder: (context, posts) {
+                  return PostsTable(posts: posts);
+                },
+              ),
             ),
           ),
         ),
