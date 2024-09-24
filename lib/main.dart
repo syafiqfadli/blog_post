@@ -1,4 +1,4 @@
-import 'package:blog_post/features/posts/presentations/pages/post_list_page.dart';
+import 'package:blog_post/features/volume_control/presentation/pages/volume_control_page.dart';
 import 'package:blog_post/injections.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +17,6 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const PostListPage();
+    return const VolumeControlPage();
   }
 }

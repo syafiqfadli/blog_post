@@ -6,6 +6,8 @@ import 'package:blog_post/features/posts/presentations/bloc/get_all_posts/get_al
 import 'package:blog_post/features/posts/presentations/bloc/get_post_comments/get_post_comments_cubit.dart';
 import 'package:blog_post/features/posts/presentations/bloc/row_changed/row_changed_cubit.dart';
 import 'package:blog_post/features/posts/presentations/bloc/search_post/search_post_cubit.dart';
+import 'package:blog_post/features/volume_control/presentation/cubit/choose_color_cubit.dart';
+import 'package:blog_post/features/volume_control/presentation/cubit/control_volume_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 final featureInjection = GetIt.instance;
@@ -45,5 +47,13 @@ void featureInit() {
 
   featureInjection.registerLazySingleton<RowChangedCubit>(
     () => RowChangedCubit(),
+  );
+
+  featureInjection.registerLazySingleton<ControlVolumeCubit>(
+    () => ControlVolumeCubit(),
+  );
+
+  featureInjection.registerLazySingleton<ChooseColorCubit>(
+    () => ChooseColorCubit(),
   );
 }
